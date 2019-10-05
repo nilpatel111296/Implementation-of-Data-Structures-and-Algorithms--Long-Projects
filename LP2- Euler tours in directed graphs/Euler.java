@@ -70,8 +70,9 @@ public class Euler extends GraphAlgorithm<Euler.EulerVertex> {
     			System.out.println(" Graph is not Strongly Connected");
     			return false;
     		}
-    	for(boolean j: visited)
-    		j = false;
+    	for(int j = 0; j < visited.length; j++) {
+    		visited[j] = false;
+    	}
     	g.reverseGraph();
     	DFS(start,visited);
     	for(boolean k: visited)
