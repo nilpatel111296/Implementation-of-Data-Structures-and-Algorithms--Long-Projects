@@ -51,12 +51,50 @@ public class Euler extends GraphAlgorithm<Euler.EulerVertex> {
      */
 
     public boolean isEulerian() {
-		
+    	Vertex[] vertices;
+    	vertices = g.getVertexArray();
+    	for(int i = 0; i < vertices.length; i++) {
+    		if(vertices[i].inDegree() != vertices[i].outDegree()) {
+    			System.out.println("Indegree = "+ vertices[i].inDegree() + " Outdegree = " + vertices[i].outDegree() + "at vertex" + i+1);
+    			return false;
+    		}
+    	}
+		return isSCC();
 	}
+    
+    public boolean isSCC(){
+    	boolean visited[] = new boolean[g.size()];
+    	DFS(start, visited);
+    	for(boolean i: visited)
+    		if(i == false) {
+    			System.out.println(" Graph is not Strongly Connected");
+    			return false;
+    		}
+    	for(boolean j: visited)
+    		j = false;
+    	g.reverseGraph();
+    	DFS(start,visited);
+    	for(boolean k: visited)
+    		if(k == false) {
+    			System.out.println(" Graph is not Strongly connected");
+    			return false;
+    		}
+    	return true;
+    }
+    
+    public void DFS(Vertex start, boolean[] visited) {
+    	visited[start.getIndex()] = true;
+    	for(Edge x: g.incident(start)) {
+    		Vertex next = x.otherEnd(g.getVertex(start));
+    		if(!visited[next.getIndex()]) {
+    			DFS(next,visited);
+    		}
+    	}
+    }
 
 
     public List<Vertex> findEulerTour() {
-	if(!isEulerian()) { return new LinkedList<Edge>(); }
+	if(!isEulerian()) { return new LinkedList<Vertex>(); }
        // Graph is Eulerian...find the tour and return tour
 	return tour;
     }
@@ -82,6 +120,7 @@ public class Euler extends GraphAlgorithm<Euler.EulerVertex> {
 
 
 	Euler euler = new Euler(g, startVertex);
+	System.out.println(euler.isEulerian());
 	List<Vertex> tour = euler.findEulerTour();
 	
 		
